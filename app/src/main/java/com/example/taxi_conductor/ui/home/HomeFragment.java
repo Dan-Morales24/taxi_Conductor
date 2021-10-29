@@ -246,7 +246,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @OnClick(R.id.menu_view)
     void onExpandView(){
 
-        CallNavigationView.expandView();
+        callNavigationView.expandView();
     }
 
 
