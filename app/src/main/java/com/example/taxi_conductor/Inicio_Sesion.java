@@ -85,32 +85,32 @@ public class Inicio_Sesion extends Fragment {
         }
 
         // Inflate the layout for this fragment
-       View view= inflater.inflate(R.layout.fragment_inicio__sesion, container, false);
-       mAuth = FirebaseAuth.getInstance();
-       mDatabase = FirebaseDatabase.getInstance().getReference();
-       Usuario =(EditText) view.findViewById(R.id.Inicio_Correo);
-       Pass =(EditText) view.findViewById(R.id.Inicio_Password);
-       LoginI=(Button) view.findViewById(R.id.Inicio_Login);
-       LoginI.setOnClickListener(new View.OnClickListener() {
+        View view= inflater.inflate(R.layout.fragment_inicio__sesion, container, false);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Usuario =(EditText) view.findViewById(R.id.Inicio_Correo);
+        Pass =(EditText) view.findViewById(R.id.Inicio_Password);
+        LoginI=(Button) view.findViewById(R.id.Inicio_Login);
+        LoginI.setOnClickListener(new View.OnClickListener() {
 
-          @Override
-           public void onClick(View v) {
-               usuario = Usuario.getText().toString();
-               pass = Pass.getText().toString();
-               if(!usuario.isEmpty() && !pass.isEmpty()){
+            @Override
+            public void onClick(View v) {
+                usuario = Usuario.getText().toString();
+                pass = Pass.getText().toString();
+                if(!usuario.isEmpty() && !pass.isEmpty()){
 
-                   progressDialog = ProgressDialog.show(getContext(), "Espera un poquito..",
-                           "Estoy verificando tus datos.", true);
-                   loginUser();
-               }
+                    progressDialog = ProgressDialog.show(getContext(), "Espera un poquito..",
+                            "Estoy verificando tus datos.", true);
+                    loginUser();
+                }
 
 
-               else{
-                   Toast.makeText(getContext(), "Faltan datos por completar ", Toast.LENGTH_SHORT).show();
-               }
+                else{
+                    Toast.makeText(getContext(), "Faltan datos por completar ", Toast.LENGTH_SHORT).show();
+                }
 
-           }
-       });
+            }
+        });
 
         return view;
     }
@@ -118,20 +118,20 @@ public class Inicio_Sesion extends Fragment {
 
     public void loginUser(){
 
-    mAuth.signInWithEmailAndPassword(usuario, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if(task.isSuccessful()) {
-            getUserInfo();
-            }
+        mAuth.signInWithEmailAndPassword(usuario, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    getUserInfo();
+                }
 
                 else {
-                Toast.makeText(getContext(), "Este usuario no existe en nuestro registro" , Toast.LENGTH_SHORT).show();
-                progressDialog.cancel();
-            }
+                    Toast.makeText(getContext(), "Este usuario no existe en nuestro registro" , Toast.LENGTH_SHORT).show();
+                    progressDialog.cancel();
+                }
 
-        }
-    });
+            }
+        });
 
     }
 

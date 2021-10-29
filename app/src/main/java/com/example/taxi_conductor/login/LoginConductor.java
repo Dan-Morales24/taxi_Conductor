@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Driver;
+
 public class LoginConductor extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
@@ -80,9 +82,13 @@ public class LoginConductor extends AppCompatActivity {
 
     public void loginUser(String usuario, String pass){
 
-       database = FirebaseDatabase.getInstance();
-       DriverInfoRef = database.getReference(Common.DRIVER_INFO_REFERENCE);
-       firebaseAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        DriverInfoRef = database.getReference(Common.DRIVER_INFO_REFERENCE);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+
+
+
 
         firebaseAuth.signInWithEmailAndPassword(usuario, pass).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -90,7 +96,10 @@ public class LoginConductor extends AppCompatActivity {
                 if(task.isSuccessful()) {
                     checkUserFromFirebase();
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-                  //  updateUI(user);
+                    Toast.makeText(LoginConductor.this, "Si existe el usuario" , Toast.LENGTH_SHORT).show();
+                    progressDialog.cancel();
+                    //    goToHomeActivity();
+                    //  updateUI(user);
                 }
 
                 else {
@@ -110,10 +119,8 @@ public class LoginConductor extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-
-                    // Toast.makeText(LoginTypeUber.this, "Usuario ya registrado: ", Toast.LENGTH_SHORT).show();
-                  //  DriverModel driverModel = snapshot.getValue(DriverModel.class);
-                        goToHomeActivity();
+                    DriverModel driverModel = snapshot.getValue(DriverModel.class);
+                    goToHomeActivity(driverModel);
 
                 }
                 else{
@@ -131,10 +138,10 @@ public class LoginConductor extends AppCompatActivity {
 
     }
 
-    private void goToHomeActivity() {
+    private void goToHomeActivity(DriverModel driverModel) {
 
-       // Common.currentRide = driverModel;
-        Toast.makeText(LoginConductor.this, "Usuario registrado" , Toast.LENGTH_SHORT).show();
+          //Toast.makeText(LoginConductor.this, "Usuario registrado" , Toast.LENGTH_SHORT).show();
+        Common.currentRide = driverModel;
         progressDialog.cancel();
         startActivity(new Intent(LoginConductor.this, NavigationConductorActivity.class));
         finish();

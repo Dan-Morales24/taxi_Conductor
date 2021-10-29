@@ -19,13 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-        <ImageView
-            android:id="@+id/menu_view"
-            android:layout_width="30dp"
-            android:layout_height="29dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            app:srcCompat="@drawable/ic_baseline_menu" />
+
 
     </FrameLayout>
 
@@ -36,8 +30,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@color/colorWhite"
         app:headerLayout="@layout/nav_header_navigation_conductor"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+        app:itemIconTint="@color/client_item_color_state"
+        app:itemTextColor="@color/client_item_color_state"
+        />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -7,7 +7,6 @@ import retrofit2.http.Query;
 
 public interface IGoogleAPI {
 
-
     //API GOOGLE
     @GET("maps/api/directions/json")
     Observable<String> getDirections(

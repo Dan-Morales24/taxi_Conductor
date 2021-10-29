@@ -10,7 +10,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Home</string>
+    <string name="menu_home">Inicio</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_maps">MapsActivity</string>
@@ -34,6 +34,9 @@
     <string name="cash_pay">300</string>
     <string name="note_price_estimate">precio estimado</string>
     <string name="confirm_uber">confirmar uber ?</string>
+    <string name="menu_sign_out">Cerrar Sesión</string>
+    <string name="menu_travels">Viajes Realizados</string>
+    <string name="menu_notification">Notificaciones</string>
 
 
 </resources>

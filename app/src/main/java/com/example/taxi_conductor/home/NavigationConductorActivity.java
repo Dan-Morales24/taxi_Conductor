@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.taxi_conductor.Model.TripPlanModel;
 import com.example.taxi_conductor.R;
+import com.example.taxi_conductor.Remote.CallNavigationView;
 import com.example.taxi_conductor.login.LoginConductor;
 import com.example.taxi_conductor.login.SplashScreenCoductor;
 import com.example.taxi_conductor.reference.Common;
@@ -50,12 +51,12 @@ import com.google.firebase.storage.StorageReference;
 
 import butterknife.BindView;
 
-public class NavigationConductorActivity extends AppCompatActivity {
+public class NavigationConductorActivity extends AppCompatActivity implements CallNavigationView{
 
 
 
     private AppBarConfiguration mAppBarConfiguration;
-   // private ActivityNavigationConductorBinding binding;
+    // private ActivityNavigationConductorBinding binding;
     private static final int PICK_IMAGE_REQUEST = 1000;
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -72,34 +73,35 @@ public class NavigationConductorActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_navigation_conductor);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-         navigationView = (NavigationView) findViewById(R.id.nav_view);
-         img_expand = (ImageView) findViewById(R.id.menu_view);
-         img_expand.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 drawerLayout.openDrawer(GravityCompat.START);
-             }
-         });
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        img_expand = (ImageView) findViewById(R.id.menu_view);
+
+     /*   img_expand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
 
-
+      */
 
         if (navigationView != null) {
             setupNavigationDrawerContent(navigationView);
         }
         setupNavigationDrawerContent(navigationView);
         setFragment(0);
-      //  binding = ActivityNavigationConductorBinding.inflate(getLayoutInflater());
-      //  setContentView(binding.getRoot());
-       // setSupportActionBar(binding.appBarNavigationConductor.toolbar);
-       //  drawer = binding.drawerLayout;
-       //  navigationView = binding.navView;
+        //  binding = ActivityNavigationConductorBinding.inflate(getLayoutInflater());
+        //  setContentView(binding.getRoot());
+        // setSupportActionBar(binding.appBarNavigationConductor.toolbar);
+        //  drawer = binding.drawerLayout;
+        //  navigationView = binding.navView;
         //mAppBarConfiguration = new AppBarConfiguration.Builder(
-          //      R.id.nav_home)
-            //    .setOpenableLayout(drawer)
-           //     .build();
-      //  NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_navigation_conductor);
-      //  NavigationUI.setupWithNavController(navigationView, navController);
+        //      R.id.nav_home)
+        //    .setOpenableLayout(drawer)
+        //     .build();
+        //  NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_navigation_conductor);
+        //  NavigationUI.setupWithNavController(navigationView, navController);
         init();
 
 
@@ -172,7 +174,7 @@ public class NavigationConductorActivity extends AppCompatActivity {
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 HomeFragment homeFragment = new HomeFragment();
-               fragmentTransaction.replace(R.id.fragment, homeFragment);
+                fragmentTransaction.replace(R.id.fragment, homeFragment);
                 fragmentTransaction.commit();
                 break;
             case 1:
@@ -189,7 +191,7 @@ public class NavigationConductorActivity extends AppCompatActivity {
                 fragmentTransaction = fragmentManager.beginTransaction();
                 SlideshowFragment starredFragment = new SlideshowFragment();
                 fragmentTransaction.addToBackStack(null);
-               fragmentTransaction.replace(R.id.fragment, starredFragment);
+                fragmentTransaction.replace(R.id.fragment, starredFragment);
                 fragmentTransaction.commit();
                 break;
 
@@ -253,6 +255,18 @@ public class NavigationConductorActivity extends AppCompatActivity {
 
         }
     }
+
+    public void computeSomething() {
+        drawerLayout.openDrawer(GravityCompat.START);
+
+    }
+
+
+    public void expandView() {
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+
 
 /*
 

@@ -2,20 +2,16 @@ package com.example.taxi_conductor.ui.home;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,20 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.taxi_conductor.EventBus.DriverRequestRecived;
 import com.example.taxi_conductor.EventBus.NotifyToRiderEvent;
-import com.example.taxi_conductor.MapFragment;
 import com.example.taxi_conductor.Model.RiderModel;
 import com.example.taxi_conductor.Model.TripPlanModel;
 import com.example.taxi_conductor.R;
@@ -50,6 +41,7 @@ import com.example.taxi_conductor.Remote.IGoogleAPI;
 import com.example.taxi_conductor.Remote.RetrofitClient;
 import com.example.taxi_conductor.Utils.ConductorUtils;
 import com.example.taxi_conductor.Utils.LocationUtils;
+import com.example.taxi_conductor.Remote.CallNavigationView;
 import com.example.taxi_conductor.databinding.FragmentHomeBinding;
 import com.example.taxi_conductor.home.NavigationConductorActivity;
 import com.example.taxi_conductor.reference.Common;
@@ -71,13 +63,10 @@ import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.SquareCap;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -102,10 +91,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -164,8 +151,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     TextView txt_notify_rider_time;
     @BindView(R.id.progress_notify)
     ProgressBar progress_notify;
-   @BindView(R.id.suspended_layout)
-   LinearLayout suspended_layout;
+    @BindView(R.id.suspended_layout)
+    LinearLayout suspended_layout;
+    @BindView(R.id.menu_view)
+    ImageView menu_view;
 
 
 
@@ -248,9 +237,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     };
     private String cityName="";
-    private DrawerLayout drawerLayout;
-    private ImageView image_expand;
-    private NavigationView navigationView;
+
+
+    CallNavigationView callNavigationView;
+
+
+
+    @OnClick(R.id.menu_view)
+    void onExpandView(){
+
+        CallNavigationView.expandView();
+    }
+
+
 
 
     //@OnClick para el CardView de cuando llega la peticion del viaje y ejecutar el metodo
@@ -352,26 +351,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                             }).addOnSuccessListener(location -> {
 
-                                ConductorUtils.sendCompleteTripToRider(mapFragment.requireView(),getContext(),driverRequestRecived.getKey(),
+                        ConductorUtils.sendCompleteTripToRider(mapFragment.requireView(),getContext(),driverRequestRecived.getKey(),
                                 tripNumberId);
-                                mMap.clear();
-                                tripNumberId ="";
-                                isTripStart = false;
-                                chip_decline.setVisibility(View.GONE);
-                                layout_accept.setVisibility(View.GONE);
-                                circularProgressBar.setProgress(0);
-                                layout_start_uber.setVisibility(View.GONE);
-                                layout_notify_rider.setVisibility(View.GONE);
-                                progress_notify.setProgress(0);
-                                btn_complete_trip.setEnabled(false);
-                                btn_complete_trip.setVisibility(View.GONE);
-                                btn_start_uber.setEnabled(false);
-                                btn_start_uber.setVisibility(View.VISIBLE);
-                                destinationGeoFire = null;
-                                pickupGeoFire = null;
-                                driverRequestRecived = null;
-                                makeDriverOnline(location);
-                            });
+                        mMap.clear();
+                        tripNumberId ="";
+                        isTripStart = false;
+                        chip_decline.setVisibility(View.GONE);
+                        layout_accept.setVisibility(View.GONE);
+                        circularProgressBar.setProgress(0);
+                        layout_start_uber.setVisibility(View.GONE);
+                        layout_notify_rider.setVisibility(View.GONE);
+                        progress_notify.setProgress(0);
+                        btn_complete_trip.setEnabled(false);
+                        btn_complete_trip.setVisibility(View.GONE);
+                        btn_start_uber.setEnabled(false);
+                        btn_start_uber.setVisibility(View.VISIBLE);
+                        destinationGeoFire = null;
+                        pickupGeoFire = null;
+                        driverRequestRecived = null;
+                        makeDriverOnline(location);
+                    });
 
                 });
 
@@ -473,7 +472,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 (key1, error) -> {
 
 
-        });
+                });
     }
 
     //Rutas
@@ -549,7 +548,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onCancelled(@NonNull DatabaseError error) {
 
                 Toast.makeText(getContext(),"Error al consultar status del conductor:  "+error,Toast.LENGTH_LONG).show();
-                
+
             }
         });
 
@@ -560,7 +559,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-     //   suspended_layout.setVisibility(View.VISIBLE);
+        //   suspended_layout.setVisibility(View.VISIBLE);
 
 
         return view;
@@ -696,12 +695,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             Snackbar.make(mapFragment.getView(),e.getMessage(),Snackbar.LENGTH_LONG).show();
                         }).addOnSuccessListener(aVoid -> {
 
-                            updateDriverLocation(location);
-                        });
+                    updateDriverLocation(location);
+                });
 
 
         }
-            else
+        else
             updateDriverLocation(location);
 
 
@@ -819,8 +818,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             fusedLocationProviderClient.getLastLocation()
                                     .addOnFailureListener(e -> Snackbar.make(getView(), e.getMessage(), Snackbar.LENGTH_SHORT)
                                             .show()).addOnSuccessListener(location -> {
-                                                    LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                                                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 18f));
+                                LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 18f));
 
 
 
@@ -1023,11 +1022,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         pickupGeoFire.setLocation(key, new GeoLocation(destination.latitude, destination.longitude),
                 (key1, error) ->{
 
-            if(error != null)
-                Snackbar.make(root_layout,error.getMessage(),Snackbar.LENGTH_LONG).show();
-                else
-                    Log.d("Juan Daniel",key1+"Fue creado con exito en GeoFire");
-        });
+                    if(error != null)
+                        Snackbar.make(root_layout,error.getMessage(),Snackbar.LENGTH_LONG).show();
+                    else
+                        Log.d("Juan Daniel",key1+"Fue creado con exito en GeoFire");
+                });
 
     }
 
@@ -1150,19 +1149,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             txt_rating.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_star_24_dark_gray, 0);
         }
 
-            else {
+        else {
             color = ContextCompat.getColor(getContext(), R.color.green);
             circularProgressBar.setIndeterminateMode(false);
             circularProgressBar.setProgress(0);
             txt_rating.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_baseline_star_24, 0);
 
-            }
+        }
 
-            txt_estimate_time.setTextColor(color);
-            txt_estimate_distance.setTextColor(color);
-            ImageViewCompat.setImageTintList(img_round, ColorStateList.valueOf(color));
-            txt_rating.setTextColor(color);
-            txt_type_uber.setTextColor(color);
+        txt_estimate_time.setTextColor(color);
+        txt_estimate_distance.setTextColor(color);
+        ImageViewCompat.setImageTintList(img_round, ColorStateList.valueOf(color));
+        txt_rating.setTextColor(color);
+        txt_type_uber.setTextColor(color);
 
 
 
@@ -1175,7 +1174,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         layout_notify_rider.setVisibility(View.VISIBLE);
         progress_notify.setMax(Common.WAIT_TIME_IN_MIN * 60);
-       waiting_timer = new CountDownTimer(Common.WAIT_TIME_IN_MIN*60*1000,1000) {
+        waiting_timer = new CountDownTimer(Common.WAIT_TIME_IN_MIN*60*1000,1000) {
             @Override
             public void onTick(long l) {
 

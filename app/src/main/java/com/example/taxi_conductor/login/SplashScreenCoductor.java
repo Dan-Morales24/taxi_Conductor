@@ -48,7 +48,7 @@ public class SplashScreenCoductor extends AppCompatActivity {
     DatabaseReference DriverInfoRef;
     private List<AuthUI.IdpConfig> providers;
 
-  //  @BindView(R.id.progress_login_bar)
+    //  @BindView(R.id.progress_login_bar)
     ProgressBar progress_login_bar;
 
     @Override
@@ -146,7 +146,7 @@ public class SplashScreenCoductor extends AppCompatActivity {
                 else{
 
                     // mostraremos el layout de que estamos esperando a que se carguen los datos
-                   // showRegisterLayout();
+                    // showRegisterLayout();
                 }
             }
 
