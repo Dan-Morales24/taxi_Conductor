@@ -30,6 +30,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -76,6 +77,7 @@ public class NavigationConductorActivity extends AppCompatActivity implements Ca
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         img_expand = (ImageView) findViewById(R.id.menu_view);
 
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
      /*   img_expand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -261,10 +263,22 @@ public class NavigationConductorActivity extends AppCompatActivity implements Ca
 
     }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof HomeFragment) {
+            HomeFragment headlinesFragment = (HomeFragment) fragment;
+            //headlinesFragment.setOnHeadlineSelectedListener(this);
+            headlinesFragment.setOnNavigationView(this);
+        }
+    }
 
+    @Override
     public void expandView() {
         drawerLayout.openDrawer(GravityCompat.START);
     }
+
+
+
 
 
 

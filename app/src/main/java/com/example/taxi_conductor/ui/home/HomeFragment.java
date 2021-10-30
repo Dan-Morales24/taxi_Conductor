@@ -105,9 +105,17 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class HomeFragment extends Fragment implements OnMapReadyCallback {
+public class HomeFragment extends Fragment implements  OnMapReadyCallback {
 
     private FirebaseAuth mAuth;
+    CallNavigationView callNavigationView;
+    private String cityName="";
+    private String tripNumberId = "";
+    private boolean isTripStart = false, onlineSystemAlreadyRegister = false;
+    private GeoFire pickupGeoFire, destinationGeoFire;
+    private GeoQuery pickupGeoQuery, destinationGeoQuery;
+    private CountDownTimer waiting_timer;
+
 
     @BindView(R.id.chip_decline)
     Chip chip_decline;
@@ -157,12 +165,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     ImageView menu_view;
 
 
-
-    private String tripNumberId = "";
-    private boolean isTripStart = false, onlineSystemAlreadyRegister = false;
-    private GeoFire pickupGeoFire, destinationGeoFire;
-    private GeoQuery pickupGeoQuery, destinationGeoQuery;
-    private CountDownTimer waiting_timer;
 
     private GeoQueryEventListener pickupGeoQueryListener = new GeoQueryEventListener() {
 
@@ -236,21 +238,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         }
     };
-    private String cityName="";
 
 
-    CallNavigationView callNavigationView;
-
-
+    public void setOnNavigationView(CallNavigationView callNavigationView){
+        this.callNavigationView= callNavigationView;
+    }
 
     @OnClick(R.id.menu_view)
     void onExpandView(){
-
         callNavigationView.expandView();
     }
-
-
-
 
     //@OnClick para el CardView de cuando llega la peticion del viaje y ejecutar el metodo
     @OnClick(R.id.chip_decline)
